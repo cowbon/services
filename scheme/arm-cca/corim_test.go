@@ -17,47 +17,52 @@ func TestProfile(t *testing.T) {
 		{
 			Title: "platform bad no class",
 			Input: corimCcaPlatformBadNoClass,
-			Err:   "class not set",
+			Err:   "environment.class is required",
 		},
 		{
 			Title: "platform bad TA no instance",
 			Input: corimCcaPlatformBadTaNoInstance,
-			Err:   "instance not set for trust anchor",
+			Err:   "environment.instance (instance-id) is required",
 		},
 		{
 			Title: "platform bad TA bytes instance",
 			Input: corimCcaPlatformBadTaInstance,
-			Err:   "instance: expected UEID, got bytes",
+			Err:   "instance-id must be of type 'ueid', got 'bytes'",
 		},
 		{
 			Title: "platform bad TA cert",
 			Input: corimCcaPlatformBadTaCert,
-			Err:   "trust anchor must be a PKIX base64 key, found: pkix-base64-cert",
-		},
-		{
-			Title: "platform bad RefVal instance",
-			Input: corimCcaPlatformBadRefvalInstance,
-			Err:   "instance set for reference value",
+			Err:   "verification-key must be of type 'pkix-base64-key', got 'pkix-base64-cert'",
 		},
 		{
 			Title: "platform bad RefVal no mkey",
 			Input: corimCcaPlatformBadRefvalNoMkey,
-			Err:   "measurement 0 key not set",
+			Err:   "mkey is mandatory but not set",
 		},
 		{
 			Title: "platform bad RefVal uint mkey",
 			Input: corimCcaPlatformBadRefvalMkey,
-			Err:   "measurement 0 key: unexpected type uint",
+			Err:   "mkey must be of type 'string', got 'uint'",
+		},
+		{
+			Title: "platform bad RefVal invalid string mkey",
+			Input: corimCcaPlatformBadRefvalMkeyString,
+			Err:   "invalid mkey \"cca.bad-component\"",
+		},
+		{
+			Title: "platform bad RefVal malformed cryptokeys",
+			Input: corimCcaPlatformBadRefvalCryptokeys,
+			Err:   "cryptokeys (signer-id) must be of type 'bytes'",
 		},
 		{
 			Title: "platform bad RefVal no digest",
 			Input: corimCcaPlatformBadRefvalNoDigests,
-			Err:   "measurement 0 value: no digests",
+			Err:   "digests field is mandatory but not set",
 		},
 		{
 			Title: "platform bad RefVal no raw value",
 			Input: corimCcaPlatformBadRefvalNoRawValue,
-			Err:   "measurement 0 value: no raw value",
+			Err:   "raw-value is mandatory for cca.platform-config",
 		},
 		{
 			Title: "realm ok",
@@ -66,22 +71,27 @@ func TestProfile(t *testing.T) {
 		{
 			Title: "realm bad instance",
 			Input: corimCcaRealmBadInstance,
-			Err:   "instance: expected bytes, got ueid",
+			Err:   "RIM must be of type 'bytes', got 'uuid'",
 		},
 		{
 			Title: "realm bad no instance",
 			Input: corimCcaRealmBadNoInstance,
-			Err:   "instance not set",
+			Err:   "environment.class is required for CCA Realm profile",
 		},
 		{
-			Title: "realm bad no integ. registers",
-			Input: corimCcaRealmBadNoIntegRegs,
-			Err:   "integrity registers not set",
+			Title: "realm bad no rim",
+			Input: corimCcaRealmBadNoRim,
+			Err:   "RIM (cca.rim) measurement is mandatory but not found",
 		},
 		{
 			Title: "realm bad no raw value",
 			Input: corimCcaRealmBadNoRawValue,
-			Err:   "personalization (raw value) not set",
+			Err:   "raw-value is mandatory for cca.rpv",
+		},
+		{
+			Title: "realm bad no integ regs",
+			Input: corimCcaRealmBadNoIntegRegs,
+			Err:   "digests field is mandatory but not set",
 		},
 	}
 

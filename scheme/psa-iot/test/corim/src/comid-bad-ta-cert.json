@@ -9,7 +9,7 @@
         "environment": {
           "class": {
             "id": {
-              "type": "psa.impl-id",
+              "type": "bytes",
               "value": "YWNtZS1pbXBsZW1lbnRhdGlvbi1pZC0wMDAwMDAwMDE="
             }
           },

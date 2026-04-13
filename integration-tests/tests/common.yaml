@@ -17,8 +17,8 @@ variables:
 
   bad-nonce: Ppfdfe2JzZLOk=
   endorsements-content-types:
-    psa.p1: application/rim+cbor; profile="http://arm.com/psa/iot/1"
-    cca._: application/rim+cbor; profile="http://arm.com/cca/ssd/1"
+    psa.p1: application/rim+cbor; profile="tag:arm.com,2025:psa#1.0.0"
+    cca._: application/rim+cbor; profile="tag:arm.com,2025:cca_platform#1.0.0"
     enacttrust._: application/rim+cbor; profile="https://enacttrust.com/veraison/1.0.0"
   evidence-content-types:
     psa.p1: application/psa-attestation-token

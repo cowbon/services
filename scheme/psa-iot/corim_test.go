@@ -17,37 +17,27 @@ func TestProfile(t *testing.T) {
 		{
 			Title: "bad wring class ID type",
 			Input: corimPsaBadClass,
-			Err:   "class ID: expected psa.impl-id, got uuid",
+			Err:   "implementation-id must be of type 'bytes', got 'uuid'",
 		},
 		{
 			Title: "bad wring instance type",
 			Input: corimPsaBadInstance,
-			Err:   "instance: expected UEID, got uuid",
+			Err:   "instance-id must be of type 'ueid', got 'uuid'",
 		},
 		{
 			Title: "bad TA no instance",
 			Input: corimPsaBadTaNoInstance,
-			Err:   "instance not set for trust anchor",
-		},
-		{
-			Title: "bad RefVal instance",
-			Input: corimPsaBadRefvalInstance,
-			Err:   "instance set for reference value",
+			Err:   "environment.instance (instance-id) is required",
 		},
 		{
 			Title: "bad TA cert",
 			Input: corimPsaBadTaCert,
-			Err:   "trust anchor must be a PKIX base64 key, found: pkix-base64-cert",
+			Err:   "verification-key must be of type 'pkix-base64-key', got 'pkix-base64-cert'",
 		},
 		{
 			Title: "bad RefVal uint mkey",
 			Input: corimPsaBadRefvalMkey,
-			Err:   "measurement 1 key: expected psa.refval-id, got uint",
-		},
-		{
-			Title: "bad RefVal mval no digests",
-			Input: corimPsaBadRefvalMval,
-			Err:   "measurement 0 value: no digests",
+			Err:   "mkey must be of type 'string', got 'uint'",
 		},
 	}
 

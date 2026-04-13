@@ -11,10 +11,10 @@ comids:
     - comid-bad-instance
   psa-bad-ta-no-instance:
     - comid-bad-ta-no-instance
-  psa-bad-refval-instance:
-    - comid-bad-refval-instance
   psa-bad-ta-cert:
     - comid-bad-ta-cert
+  psa-bad-refval-instance:
+    - comid-bad-refval-instance
   psa-bad-refval-mkey:
     - comid-bad-refval-mkey
   psa-bad-refval-mval:

@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/veraison/corim/comid"
+	"github.com/veraison/corim/profiles/cca"
 	"github.com/veraison/ear"
 	"github.com/veraison/go-cose"
 	parsec_cca "github.com/veraison/parsec/cca"
@@ -59,7 +60,7 @@ func (o *Implementation) GetTrustAnchorIDs(
 		return nil, err
 	}
 
-	classID, err := comid.NewImplIDClassID(implIDbytes)
+	classID, err := cca.NewPlatformImplIDClassID(implIDbytes)
 	if err != nil {
 		return nil, err
 	}
@@ -129,9 +130,9 @@ func (o *Implementation) ExtractClaims(
 	}
 
 	claims := map[string]any{
-		"kat":          katClaims,
-		"cca.platform": platformClaims,
-		"cca.realm":    realmClaims,
+		"kat":      katClaims,
+		"platform": platformClaims,
+		"realm":    realmClaims,
 	}
 
 	return claims, nil
@@ -189,7 +190,7 @@ func (o *Implementation) AppraiseClaims(
 		return result, fmt.Errorf("setting extracted public key: %w", err)
 	}
 
-	err = cca_scheme.AppraisePlatform(o.logger, appraisal, claims["cca.platform"], endorsements)
+	err = cca_scheme.AppraisePlatform(o.logger, appraisal, claims["platform"], endorsements)
 	if err != nil {
 		return result, err
 	}

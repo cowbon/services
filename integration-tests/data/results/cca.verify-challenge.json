@@ -18,7 +18,7 @@
       "cca-platform-implementation-id": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
       "cca-platform-instance-id": "AQICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC",
       "cca-platform-lifecycle": 12288,
-      "cca-platform-profile": "http://arm.com/CCA-SSD/1.0.0",
+      "cca-platform-profile": "tag:arm.com,2023:cca_platform#1.0.0",
       "cca-platform-service-indicator": "https://veraison.example/v1/challenge-response",
       "cca-platform-sw-components": [
         {

@@ -9,7 +9,7 @@
         "environment": {
           "class": {
             "id": {
-              "type": "psa.impl-id",
+              "type": "bytes",
               "value": "YWNtZS1pbXBsZW1lbnRhdGlvbi1pZC0wMDAwMDAwMDE="
             }
           }
@@ -17,17 +17,20 @@
         "measurements": [
           {
             "key": {
-              "type": "psa.refval-id",
-              "value": {
-                "label": "BL",
-                "version": "2.1.0",
-                "signer-id": "rLsRx+TaIXIFUjzkzhokWuGiOa48a/2eeHH35di66Gs="
-              }
+              "type": "string",
+              "value": "psa.software-component"
             },
             "value": {
+              "cryptokeys": [
+                {
+                  "type": "bytes",
+                  "value": "01234567890123456789012345678901"
+                }
+              ],
               "digests": [
                 "sha-256:h0KPxSKAPTEGXnvOPPA/5HUJZjHl4Hu9eg/eYMTPJcc="
-              ]
+              ],
+              "name": "BL"
             }
           },
           {

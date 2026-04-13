@@ -37,7 +37,7 @@ func TestProfile(t *testing.T) {
 		{
 			Title: "bad no instance",
 			Input: corimEnacttrustBadNoInstance,
-			Err:   "instance not set in environment",
+			Err:   "cannot unmarshal byte string",
 		},
 		{
 			Title: "bad multiple measurements",

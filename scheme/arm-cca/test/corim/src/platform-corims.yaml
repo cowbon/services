@@ -13,12 +13,14 @@ comids:
     - comid-cca-platform-bad-ta-instance
   cca-platform-bad-ta-cert:
     - comid-cca-platform-bad-ta-cert
-  cca-platform-bad-refval-instance:
-    - comid-cca-platform-bad-refval-instance
   cca-platform-bad-refval-no-mkey:
     - comid-cca-platform-bad-refval-no-mkey
   cca-platform-bad-refval-mkey:
     - comid-cca-platform-bad-refval-mkey
+  cca-platform-bad-refval-mkey-string:
+    - comid-cca-platform-bad-refval-mkey-string
+  cca-platform-bad-refval-cryptokeys:
+    - comid-cca-platform-bad-refval-cryptokeys
   cca-platform-bad-refval-no-digests:
     - comid-cca-platform-bad-refval-no-digests
   cca-platform-bad-refval-no-raw-value:

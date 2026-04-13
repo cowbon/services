@@ -16,6 +16,7 @@ import (
 	"github.com/veraison/ccatoken/platform"
 	"github.com/veraison/ccatoken/realm"
 	"github.com/veraison/corim/comid"
+	"github.com/veraison/corim/profiles/cca"
 	"github.com/veraison/ear"
 	"github.com/veraison/services/handler"
 	"github.com/veraison/services/log"
@@ -29,10 +30,8 @@ var Descriptor = handler.SchemeDescriptor{
 	VersionMajor: 1,
 	VersionMinor: 0,
 	CorimProfiles: []string{
-		LegacyPlatformProfileString,
-		LegacyRealmProfileString,
-		PlatformProfileString,
-		RealmProfileString,
+		cca.PlatformProfileURI,
+		cca.RealmProfileURI,
 	},
 	EvidenceMediaTypes: []string{
 		`application/eat-collection; profile="http://arm.com/CCA-SSD/1.0.0"`,
@@ -67,7 +66,7 @@ func (o *Implementation) GetTrustAnchorIDs(
 		return nil, err
 	}
 
-	classID, err := comid.NewImplIDClassID(implIDbytes)
+	classID, err := cca.NewPlatformImplIDClassID(implIDbytes)
 	if err != nil {
 		return nil, err
 	}
@@ -445,8 +444,22 @@ func matchPlatformClaimsToReferenceValues(
 		}
 
 		for _, measurement := range triple.Measurements.Values {
-			_, err = measurement.Key.GetCCAPlatformConfigID()
-			if err == nil {
+			if measurement.Key == nil || !measurement.Key.IsSet() {
+				return false, false, errors.New("platform reference value measurement missing mkey")
+			}
+
+			if measurement.Key.Type() != comid.StringType {
+				return false, false, fmt.Errorf(
+					"platform reference value measurement mkey must be string, got %s",
+					measurement.Key.Type(),
+				)
+			}
+
+			mkey := measurement.Key.Value.String()
+
+			// Check if this is a platform config measurement.
+			if mkey == cca.CCAPlatformConfigMkey {
+
 				if measurement.Val.RawValue == nil {
 					return false, false,
 						errors.New("no raw value in platform config measurement")
@@ -460,12 +473,14 @@ func matchPlatformClaimsToReferenceValues(
 				continue
 			}
 
-			// not platform config entry, therefore must be a S/W component entry.
-			refValID, err := measurement.Key.GetPSARefValID()
-			if err != nil {
-				return false, false, err
+			if mkey != "cca.software-component" {
+				return false, false, fmt.Errorf(
+					"invalid mkey %q in platform reference value measurement",
+					mkey,
+				)
 			}
 
+			// Not a platform-config entry: this must be a platform software component.
 			if measurement.Val.Digests == nil {
 				return false, false, errors.New("no digests in reference value measurement")
 			}
@@ -479,7 +494,17 @@ func matchPlatformClaimsToReferenceValues(
 			}
 
 			encoded := base64.StdEncoding.EncodeToString((*measurement.Val.Digests)[0].HashValue)
-			referenceValues[encoded] = [2]string{*refValID.Label, *refValID.Version}
+			// Extract label (mtype) and version from measurement value
+			var label, version string
+
+			if measurement.Val.Name != nil {
+				label = *measurement.Val.Name
+			}
+			if measurement.Val.Ver != nil {
+				version = measurement.Val.Ver.Version
+			}
+
+			referenceValues[encoded] = [2]string{label, version}
 		}
 	}
 

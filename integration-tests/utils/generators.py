@@ -6,6 +6,7 @@ import os
 import shutil
 import tempfile
 import uuid
+from datetime import datetime, timezone
 
 from util import update_json, run_command
 
@@ -44,7 +45,7 @@ def generate_cca_end_to_end_endorsements(test):
     corim_template_name = 'corim-{}-platform-{}.json'.format(scheme, spec)
     corim_template = f'data/endorsements/{corim_template_name}'
     tag = ["refval", "ta"]
-    comid_templates = ['data/endorsements/comid-{}-{}.json'.format(scheme, c)
+    comid_templates = ['data/endorsements/comid-{}-platform-{}.json'.format(scheme, c)
                        for c in tag[0:]]
     
     # Generate unsigned CoRIM
@@ -63,7 +64,7 @@ def generate_cca_end_to_end_endorsements(test):
     corim_template_name = 'corim-{}-realm-{}.json'.format(scheme, spec)
     corim_template = f'data/endorsements/{corim_template_name}'
     tag = ["refval"]
-    comid_templates = ['data/endorsements/comid-{}-{}.json'.format(scheme, c)
+    comid_templates = ['data/endorsements/comid-{}-realm-{}.json'.format(scheme, c)
                        for c in tag[0:]]
     
     # Generate unsigned CoRIM
@@ -76,6 +77,13 @@ def generate_cca_end_to_end_endorsements(test):
         sign_corim(unsigned_output_path, signed_output_path)
         # Use the signed CoRIM as the output
         shutil.copyfile(signed_output_path, unsigned_output_path)
+    
+    # For tests that need a single endorsement file (like freshness_check_fail),
+    # create a combined file by copying the platform file
+    platform_output_path = f'{GENDIR}/endorsements/corim-{scheme}-platform-{spec}.cbor'
+    combined_output_path = f'{GENDIR}/endorsements/corim-{scheme}-{spec}.cbor'
+    shutil.copyfile(platform_output_path, combined_output_path)
+
 
 
 def generate_artefacts_from_response(response, scheme, evidence, signing, keys, expected):
@@ -238,11 +246,14 @@ def generate_corim(corim_template, comid_templates, output_path):
 
 def sign_corim(unsigned_corim_path, signed_corim_path):
     meta_file = f'{GENDIR}/meta.json'
+    now = datetime.now(timezone.utc)
     meta_content = {
         "signer": {
-            "name": "Veraison Test Signer",
-            "uri": "https://veraison.example/test-signer",
-            "id": "Veraison Test Signer"
+            "name": "veraison-services-test"
+        },
+        "validity": {
+            "not-before": now.isoformat(),
+            "not-after": now.replace(year=now.year + 20).isoformat(),
         }
     }
     

@@ -8,6 +8,8 @@ comids:
     - comid-cca-realm-bad-instance
   cca-realm-bad-no-instance:
     - comid-cca-realm-bad-no-instance
+  cca-realm-bad-no-rim:
+    - comid-cca-realm-bad-no-rim
   cca-realm-bad-no-integ-regs:
     - comid-cca-realm-bad-no-integ-regs
   cca-realm-bad-no-raw-value:

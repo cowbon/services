@@ -10,7 +10,7 @@
           "class": {
             "id": {
               "type": "bytes",
-              "value": "YWNtZS1pbXBsZW1lbnRhdGlvbi1pZC0wMDAwMDAwMDE="
+              "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             }
           }
         },
@@ -18,7 +18,7 @@
           {
             "key": {
               "type": "string",
-              "value": "psa.software-component"
+              "value": "cca.bad-component"
             },
             "value": {
               "cryptokeys": [
@@ -27,10 +27,13 @@
                   "value": "01234567890123456789012345678901"
                 }
               ],
-              "name": "ARoT",
-              "svn": {
-                "type": "exact-value",
-                "value": 15208092991676744000
+              "digests": [
+                "sha-256:BwYFBAMCAQAPDg0MCwoJCBcWFRQTEhEQHx4dHBsaGRg="
+              ],
+              "name": "BL",
+              "version": {
+                "value": "3.4.2",
+                "scheme": "semver"
               }
             }
           }

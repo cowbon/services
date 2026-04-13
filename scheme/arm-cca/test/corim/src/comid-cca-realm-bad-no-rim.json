@@ -18,10 +18,12 @@
           {
             "key": {
               "type": "string",
-              "value": "cca.rim"
+              "value": "cca.rem0"
             },
             "value": {
-              "name": "RIM"
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
             }
           },
           {

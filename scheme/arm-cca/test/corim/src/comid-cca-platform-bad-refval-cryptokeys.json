@@ -21,14 +21,19 @@
               "value": "cca.software-component"
             },
             "value": {
+              "cryptokeys": [
+                {
+                  "type": "pkix-base64-key",
+                  "value": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEMKBCTNIcKUSDii11ySs3526iDZ8A\niTo7Tu6KPAqv7D7gS2XpJFbZiItSs3m9+9Ue6GnvHw/GW2ZZaVtszggXIw==\n-----END PUBLIC KEY-----"
+                }
+              ],
+              "digests": [
+                "sha-256:BwYFBAMCAQAPDg0MCwoJCBcWFRQTEhEQHx4dHBsaGRg="
+              ],
               "name": "BL",
               "version": {
                 "value": "3.4.2",
                 "scheme": "semver"
-              },
-              "raw-value": {
-                "type": "bytes",
-                "value": "AQID"
               }
             }
           }

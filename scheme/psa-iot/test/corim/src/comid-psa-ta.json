@@ -10,7 +10,7 @@
         "environment": {
           "class": {
             "id": {
-              "type": "psa.impl-id",
+              "type": "bytes",
               "value": "YWNtZS1pbXBsZW1lbnRhdGlvbi1pZC0wMDAwMDAwMDE="
             }
           },
@@ -30,11 +30,11 @@
         "environment": {
           "class": {
             "id": {
-              "type": "psa.impl-id",
+              "type": "bytes",
               "value": "YWNtZS1pbXBsZW1lbnRhdGlvbi1pZC0wMDAwMDAwMDE="
             },
-            "vendor": "ACME",
-            "model": "RoadRunner"
+            "model": "RoadRunner",
+            "vendor": "ACME"
           },
           "instance": {
             "type": "ueid",

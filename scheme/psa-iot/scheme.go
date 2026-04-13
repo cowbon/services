@@ -11,6 +11,7 @@ import (
 	"fmt"
 
 	"github.com/veraison/corim/comid"
+	"github.com/veraison/corim/profiles/psa"
 	"github.com/veraison/ear"
 	"github.com/veraison/psatoken"
 	"github.com/veraison/services/handler"
@@ -25,7 +26,7 @@ var Descriptor = handler.SchemeDescriptor{
 	VersionMajor: 1,
 	VersionMinor: 0,
 	CorimProfiles: []string{
-		ProfileString,
+		psa.ProfileURI,
 	},
 	EvidenceMediaTypes: []string{
 		"application/psa-attestation-token",
@@ -63,7 +64,7 @@ func (o *Implementation) GetTrustAnchorIDs(
 		return nil, err
 	}
 
-	classID, err := comid.NewImplIDClassID(implIDbytes)
+	classID, err := comid.NewBytesClassID(implIDbytes)
 	if err != nil {
 		return nil, err
 	}
@@ -222,11 +223,6 @@ func matchClaimsToReferenceValues(
 	referenceValues := make(map[string][2]string)
 	for _, triple := range endorsements {
 		for _, measurement := range triple.Measurements.Values {
-			refValID, err := measurement.Key.GetPSARefValID()
-			if err != nil {
-				return false, err
-			}
-
 			if measurement.Val.Digests == nil {
 				return false, errors.New("no digests in reference value measurement")
 			}
@@ -240,7 +236,18 @@ func matchClaimsToReferenceValues(
 			}
 
 			encoded := base64.StdEncoding.EncodeToString((*measurement.Val.Digests)[0].HashValue)
-			referenceValues[encoded] = [2]string{*refValID.Label, *refValID.Version}
+			// Extract label (mtype) and version from measurement value
+			label := ""
+			if measurement.Val.Name != nil {
+				label = *measurement.Val.Name
+			}
+
+			version := ""
+			if measurement.Val.Ver != nil {
+				version = measurement.Val.Ver.Version
+			}
+
+			referenceValues[encoded] = [2]string{label, version}
 		}
 	}
 

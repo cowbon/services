@@ -7,51 +7,76 @@
     "reference-values": [
       {
         "environment": {
-            "class": {
-              "id": {
-                "type": "psa.impl-id",
-                "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-              }
-            }
+          "instance": {
+            "type": "bytes",
+            "value": "Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+          }
         },
         "measurements": [
           {
+            "key": {
+              "type": "string",
+              "value": "cca.rim"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem0"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem1"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem2"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem3"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rpv"
+            },
             "value": {
               "raw-value": {
                 "type": "bytes",
                 "value": "QURBREFEQURBREFEQURBREFEQURBREFEQURBREFEQURBREFEQURBREFEQURBREFEQURBREFEQURBREFEQURBRA=="
-              },
-              "integrity-registers": {
-                "rim": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem0": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem1": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem2": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem3": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                }
               }
             }
           }

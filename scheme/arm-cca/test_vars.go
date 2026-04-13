@@ -10,8 +10,14 @@ var (
 	//go:embed test/corim/corim-cca-platform-bad-no-class.cbor
 	corimCcaPlatformBadNoClass []byte
 
+	//go:embed test/corim/corim-cca-platform-bad-refval-cryptokeys.cbor
+	corimCcaPlatformBadRefvalCryptokeys []byte
+
 	//go:embed test/corim/corim-cca-platform-bad-refval-instance.cbor
 	corimCcaPlatformBadRefvalInstance []byte
+
+	//go:embed test/corim/corim-cca-platform-bad-refval-mkey-string.cbor
+	corimCcaPlatformBadRefvalMkeyString []byte
 
 	//go:embed test/corim/corim-cca-platform-bad-refval-mkey.cbor
 	corimCcaPlatformBadRefvalMkey []byte
@@ -48,6 +54,9 @@ var (
 
 	//go:embed test/corim/corim-cca-realm-bad-no-raw-value.cbor
 	corimCcaRealmBadNoRawValue []byte
+
+	//go:embed test/corim/corim-cca-realm-bad-no-rim.cbor
+	corimCcaRealmBadNoRim []byte
 
 	//go:embed test/corim/corim-cca-realm-valid.cbor
 	corimCcaRealmValid []byte

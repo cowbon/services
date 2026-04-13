@@ -21,11 +21,9 @@
         "environment": {
           "class": {
             "id": {
-              "type": "psa.impl-id",
+              "type": "bytes",
               "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-            },
-            "vendor": "ACME",
-            "model": "RoadRunner"
+            }
           },
           "instance": {
             "type": "ueid",

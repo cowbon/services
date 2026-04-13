@@ -7,46 +7,78 @@
     "reference-values": [
       {
         "environment": {
-          "instance": {
-            "type": "bytes",
-            "value": "Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+          "class": {
+            "id": {
+              "type": "bytes",
+              "value": "Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+            }
           }
         },
         "measurements": [
           {
+            "key": {
+              "type": "string",
+              "value": "cca.rim"
+            },
             "value": {
-              "integrity-registers": {
-                "rim": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem0": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem1": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem2": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                },
-                "rem3": {
-                  "key-type": "text",
-                  "value": [
-                    "sha-512;Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
-                  ]
-                }
-              }
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem0"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem1"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem2"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rem3"
+            },
+            "value": {
+              "digests": [
+                "sha-512:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQw=="
+              ]
+            }
+          },
+          {
+            "key": {
+              "type": "string",
+              "value": "cca.rpv"
+            },
+            "value": {
+              "digests": [
+                "sha-256:Q0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0M="
+              ]
             }
           }
         ]

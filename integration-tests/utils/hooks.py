@@ -17,11 +17,12 @@ def setup_end_to_end(test, variables):
 def setup_bad_session(test, variables):
     _set_authorization(test, variables, 'provisioner')
     generate_endorsements(test)
+    generate_evidence_from_test_no_nonce(test)
 
 
 def setup_no_nonce(test, variables):
     _set_authorization(test, variables, 'provisioner')
-    generate_evidence_from_test(test)
+    generate_evidence_from_test_no_nonce(test)
 
 
 def setup_multi_nonce(test, variables):
@@ -54,11 +55,11 @@ def setup_provisioning_fail_empty_body(test, variables):
 
 
 def setup_cca_verify_challenge(test, variables):
-    _set_content_types(test, variables)
+    _set_cca_content_types(test, variables)
     _set_authorization(test, variables, 'provisioner')
     _set_alt_authorization(test, variables, 'manager')
     _set_nonce(test, variables)
-    generate_endorsements(test)
+    generate_cca_end_to_end_endorsements(test)
     generate_evidence_from_test(test)
 
 def setup_cca_end_to_end(test, variables):
@@ -70,10 +71,16 @@ def setup_cca_end_to_end(test, variables):
     generate_evidence_from_test(test)
 
 def setup_freshness_check_fail(test, variables):
-    _set_content_types(test, variables)
+    scheme = test.test_vars['scheme']
     _set_authorization(test, variables, 'provisioner')
     _set_nonce(test, variables)
-    generate_endorsements(test)
+    
+    if scheme == 'cca':
+        _set_cca_content_types(test, variables)
+        generate_cca_end_to_end_endorsements(test)
+    else:
+        _set_content_types(test, variables)
+        generate_endorsements(test)
     generate_evidence_from_test(test)
 
 def _set_content_types(test, variables):
@@ -113,9 +120,14 @@ def _set_cca_content_types(test, variables):
     # Set platform and realm content types
     if corim_type == 'signed':
         # Use signed content types
-        variables['platform-en-content-type'] = 'application/rim+cose; profile="http://arm.com/cca/ssd/1"'
-        variables['realm-en-content-type'] = 'application/rim+cose; profile="http://arm.com/cca/realm/1"'
+        platform_ct = 'application/rim+cose; profile="tag:arm.com,2025:cca_platform#1.0.0"'
+        realm_ct = 'application/rim+cose; profile="tag:arm.com,2025:cca_realm#1.0.0"'
     else:
         # Use unsigned content types
-        variables['platform-en-content-type'] = 'application/rim+cbor; profile="http://arm.com/cca/ssd/1"'
-        variables['realm-en-content-type'] = 'application/rim+cbor; profile="http://arm.com/cca/realm/1"'
+        platform_ct = 'application/rim+cbor; profile="tag:arm.com,2025:cca_platform#1.0.0"'
+        realm_ct = 'application/rim+cbor; profile="tag:arm.com,2025:cca_realm#1.0.0"'
+    
+    variables['platform-en-content-type'] = platform_ct
+    variables['realm-en-content-type'] = realm_ct
+    # For simple tests that submit a single file, use platform content type
+    variables['endorsements-content-type'] = platform_ct

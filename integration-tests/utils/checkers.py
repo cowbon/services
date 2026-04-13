@@ -33,11 +33,9 @@ def compare_to_expected_result(response, expected, verifier_key):
         expected_submods = json.load(fh)
 
     for key, expected_claims in expected_submods.items():
-        try:
-            decoded_claims = decoded_submods[key]
-            print("Key exists in the dictionary.")
-        except KeyError:
-            print(f"Key {key} does not exist in the dictionary.")
+        decoded_claims = decoded_submods.get(key)
+        if decoded_claims is None:
+            raise AssertionError(f'submod "{key}" missing in attestation result')
 
         assert decoded_claims["ear.status"] == expected_claims["ear.status"]
         print(f"Evaluating Submod with SubModName {key}")
