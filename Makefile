@@ -47,7 +47,6 @@ IGNORE_COVERAGE += github.com/veraison/services/coserv/api
 IGNORE_COVERAGE += github.com/veraison/services/coserv/cmd/coserv-service
 IGNORE_COVERAGE += github.com/veraison/services/scheme/amd-kds-coserv
 IGNORE_COVERAGE += github.com/veraison/services/scheme/nvidia-coserv
-IGNORE_COVERAGE += github.com/veraison/services/scheme/arm-cca
 IGNORE_COVERAGE += github.com/veraison/services/scheme/parsec-cca
 IGNORE_COVERAGE += github.com/veraison/services/scheme/parsec-tpm
 IGNORE_COVERAGE += github.com/veraison/services/scheme/psa-iot
