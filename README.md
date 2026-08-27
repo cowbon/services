@@ -4,7 +4,7 @@ This repository contains attestation services assembled using Veraison component
 
 ## Pre-built packages
 
-Packages are automatically generated for each monthly tag, you can find them
+Packages are automatically generated for each GitHub release, you can find them
 attached to the [corresponding job
 here](https://github.com/veraison/services/actions/workflows/time-package.yml).
 
@@ -228,4 +228,3 @@ Endorsements and Trust Anchors.
 
 KV Store details can be found under
 [kvstore](https://github.com/veraison/services/tree/main/kvstore/README.md#kv-store)
-
