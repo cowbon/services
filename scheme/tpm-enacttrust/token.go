@@ -45,9 +45,9 @@ func (t *Token) Decode(data []byte) error {
 	}
 
 	size := binary.BigEndian.Uint16(data[16:18])
-	if len(data) < int(16+size) {
+	if len(data) < int(18+size) {
 		return fmt.Errorf("TPMS_ATTEST appears truncated; expected %d, but got %d bytes",
-			size, len(data)-16)
+			size, len(data)-18)
 	}
 
 	t.Raw = data[18 : 18+size]
