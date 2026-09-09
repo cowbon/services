@@ -1,4 +1,4 @@
-// Copyright 2021-2023 Contributors to the Veraison project.
+// Copyright 2021-2026 Contributors to the Veraison project.
 // SPDX-License-Identifier: Apache-2.0
 package tpm_enacttrust
 
@@ -7,6 +7,7 @@ import (
 	"crypto/ecdsa"
 	"crypto/sha256"
 	"encoding/binary"
+	"errors"
 	"fmt"
 
 	tpm2 "github.com/google/go-tpm/tpm2"
@@ -60,6 +61,10 @@ func (t *Token) Decode(data []byte) error {
 		return fmt.Errorf("could not decode TPMT_SIGNATURE: %v", err)
 	}
 
+	if err := validateSignatureFormat(t.Signature); err != nil {
+		return fmt.Errorf("invalid TPMT_SIGNATURE: %w", err)
+	}
+
 	return nil
 }
 
@@ -68,6 +73,33 @@ func (t Token) VerifySignature(key *ecdsa.PublicKey) error {
 
 	if !ecdsa.Verify(key, digest[:], t.Signature.ECC.R, t.Signature.ECC.S) {
 		return fmt.Errorf("failed to verify signature")
+	}
+
+	return nil
+}
+
+// validateSignatureFormat makes sure the signature has the expected format.
+// This does NOT check that the signature is valid for the object being signed.
+func validateSignatureFormat(sig *tpm2.Signature) error {
+	if sig == nil {
+		return errors.New("nil")
+	}
+
+	if sig.Alg != tpm2.AlgECDSA {
+		return fmt.Errorf("invalid alg: %d (must be %d (ECDSA))", sig.Alg, tpm2.AlgECDSA)
+	}
+
+	if sig.ECC == nil {
+		return errors.New("missing ECC signature")
+	}
+
+	if sig.ECC.HashAlg != tpm2.AlgSHA256 {
+		return fmt.Errorf("unsupported hash alg: %d (only %d (SHA256) is supported)",
+			sig.ECC.HashAlg, tpm2.AlgSHA256)
+	}
+
+	if sig.ECC.R == nil || sig.ECC.S == nil {
+		return errors.New("missing ECC signature component(s)")
 	}
 
 	return nil
