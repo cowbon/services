@@ -30,6 +30,7 @@ type cfg struct {
 	Cert            string `mapstructure:"cert" config:"zerodefault"`
 	CertKey         string `mapstructure:"cert-key" config:"zerodefault"`
 	DiscoveryMaxAge string `mapstructure:"discovery-max-age" config:"zerodefault"`
+	MaxPayloadSize  string `mapstructure:"max-payload-size"`
 }
 
 func (o cfg) Validate() error {
@@ -56,6 +57,7 @@ func main() {
 	cfg := cfg{
 		ListenAddr: DefaultListenAddr,
 		Protocol:   "https",
+		MaxPayloadSize: "1MB",
 	}
 
 	subs, err := config.GetSubs(v, "provisioning", "vts", "*logging", "*auth")
@@ -74,6 +76,11 @@ func main() {
 	loader := config.NewLoader(&cfg)
 	if err = loader.LoadFromViper(subs["provisioning"]); err != nil {
 		log.Fatalf("Could not load config: %v", err)
+	}
+
+	maxPayloadSize, err := config.ParseBytesSize(cfg.MaxPayloadSize)
+	if err != nil {
+		log.Fatalf("Could not parse max-payload-size: %v", err)
 	}
 
 	log.Info("initializing VTS client")
@@ -111,7 +118,7 @@ func main() {
 		}
 	}()
 
-	apiHandler := api.NewHandler(provisioner, log.Named("api"), cfg.DiscoveryMaxAge)
+	apiHandler := api.NewHandler(provisioner, log.Named("api"), cfg.DiscoveryMaxAge, maxPayloadSize)
 
 	if cfg.Protocol == "https" {
 		go apiServerTLS(apiHandler, authorizer, cfg.ListenAddr, cfg.Cert, cfg.CertKey)

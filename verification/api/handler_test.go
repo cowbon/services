@@ -30,6 +30,7 @@ import (
 
 const (
 	sessionURIRegexp = `^session/[0-9a-fA-F]{8}-([0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}$`
+	maxPayloadSize = int64(99999)
 )
 
 var (
@@ -235,7 +236,7 @@ func TestHandler_NewChallengeResponse_NoNonceParameters(t *testing.T) {
 		SupportedMediaTypes().
 		Return(testSupportedMediaTypes, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	expectedCode := http.StatusCreated
 	expectedType := ChallengeResponseSessionMediaType
@@ -275,7 +276,7 @@ func TestHandler_NewChallengeResponse_NonceParameter(t *testing.T) {
 		SupportedMediaTypes().
 		Return(testSupportedMediaTypes, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	expectedCode := http.StatusCreated
 	expectedType := ChallengeResponseSessionMediaType
@@ -322,7 +323,7 @@ func TestHandler_NewChallengeResponse_NonceSizeParameter(t *testing.T) {
 		SupportedMediaTypes().
 		Return(testSupportedMediaTypes, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	expectedCode := http.StatusCreated
 	expectedType := ChallengeResponseSessionMediaType
@@ -379,7 +380,7 @@ func TestHandler_NewChallengeResponse_SetSessionFailure(t *testing.T) {
 		SupportedMediaTypes().
 		Return(testSupportedMediaTypes, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	qParams := url.Values{}
 	qParams.Add("nonceSize", "32")
@@ -460,7 +461,7 @@ func TestHandler_SubmitEvidence_unsupported_evidence_format(t *testing.T) {
 		IsSupportedMediaType(testUnsupportedMediaType).
 		Return(false, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -501,7 +502,7 @@ func TestHandler_SubmitEvidence_bad_session_id_url(t *testing.T) {
 		IsSupportedMediaType(testSupportedMediaTypeA).
 		Return(true, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -546,7 +547,7 @@ func TestHandler_SubmitEvidence_session_not_found(t *testing.T) {
 		IsSupportedMediaType(testSupportedMediaTypeA).
 		Return(true, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -581,7 +582,7 @@ func TestHandler_SubmitEvidence_no_body(t *testing.T) {
 
 	sm := mock_deps.NewMockISessionManager(ctrl)
 	v := mock_deps.NewMockIVerifier(ctrl)
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -630,7 +631,7 @@ func TestHandler_SubmitEvidence_process_evidence_failed(t *testing.T) {
 		ProcessEvidence(tenantID, testNonce, []byte(testJSONBody), testSupportedMediaTypeA).
 		Return(nil, errors.New(vmErr))
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -673,7 +674,7 @@ func TestHandler_SubmitEvidence_process_ok_sync(t *testing.T) {
 		ProcessEvidence(tenantID, testNonce, []byte(testJSONBody), testSupportedMediaTypeA).
 		Return([]byte(testResult), nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -716,7 +717,7 @@ func TestHandler_SubmitEvidence_process_ok_async(t *testing.T) {
 		ProcessEvidence(tenantID, testNonce, []byte(testJSONBody), testSupportedMediaTypeA).
 		Return(nil, nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -755,7 +756,7 @@ func TestHandler_GetSession_bad_session_id_url(t *testing.T) {
 	sm := mock_deps.NewMockISessionManager(ctrl)
 	v := mock_deps.NewMockIVerifier(ctrl)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -797,7 +798,7 @@ func TestHandler_GetSession_session_not_found(t *testing.T) {
 
 	v := mock_deps.NewMockIVerifier(ctrl)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -832,7 +833,7 @@ func TestHandler_GetSession_ok(t *testing.T) {
 
 	v := mock_deps.NewMockIVerifier(ctrl)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -864,7 +865,7 @@ func TestHandler_DelSession_ok(t *testing.T) {
 
 	v := mock_deps.NewMockIVerifier(ctrl)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -893,7 +894,7 @@ func TestHandler_DelSession_bad_session_id(t *testing.T) {
 	sm := mock_deps.NewMockISessionManager(ctrl)
 	v := mock_deps.NewMockIVerifier(ctrl)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -931,7 +932,7 @@ func TestHandler_DelSession_session_id_does_not_exist(t *testing.T) {
 
 	v := mock_deps.NewMockIVerifier(ctrl)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -975,7 +976,7 @@ func TestHandler_GetWellKnownVerificationInfo_ok(t *testing.T) {
 		ApiEndpoints: publicApiMap,
 	}
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -1008,7 +1009,7 @@ func TestHandler_GetWellKnownVerificationInfo_GetPublicKey_failure(t *testing.T)
 	expectedType := "application/problem+json"
 	expectedErrorTitle := "Internal Server Error"
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -1042,7 +1043,7 @@ func TestHandler_GetWellKnownVerificationInfo_Get_SupportedMediaTypes_fail(t *te
 	expectedType := "application/problem+json"
 	expectedErrorTitle := "Internal Server Error"
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -1080,7 +1081,7 @@ func TestHandler_GetWellKnownVerificationInfo_GetVTSState_fail(t *testing.T) {
 	expectedType := "application/problem+json"
 	expectedErrorTitle := "Internal Server Error"
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -1159,7 +1160,7 @@ func TestHandler_SubmitEvidence_good_CMW(t *testing.T) {
 		ProcessEvidence(tenantID, testNonce, []byte(testJSONBody), testSupportedMediaTypeA).
 		Return([]byte(testResult), nil)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
@@ -1198,11 +1199,52 @@ func TestHandler_SubmitEvidence_bad_CMW(t *testing.T) {
 
 	v := mock_deps.NewMockIVerifier(ctrl)
 
-	h := NewHandler(sm, v, "1h")
+	h := NewHandler(sm, v, "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 
 	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewReader(badCMW))
+	req.Header.Set("Accept", ChallengeResponseSessionMediaType)
+	req.Header.Set("Content-Type", "application/vnd.veraison.cmw")
+
+	NewRouter(h).ServeHTTP(w, req)
+
+	var body problems.DefaultProblem
+	_ = json.Unmarshal(w.Body.Bytes(), &body)
+
+	assert.Equal(t, expectedCode, w.Code)
+	assert.Equal(t, expectedType, w.Result().Header.Get("Content-Type"))
+	assert.Equal(t, expectedBody, body)
+}
+
+func TestHandler_SubmitEvidence_payload_too_large(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	testCMW := goodCMW(t)
+
+	verifierError := "payload too large"
+
+	url := path.Join(testSessionBaseURL, testUUIDString)
+
+	expectedCode := http.StatusBadRequest
+	expectedType := "application/problem+json"
+	expectedBody := problems.DefaultProblem{
+		Type:   "about:blank",
+		Title:  "Bad Request",
+		Status: http.StatusBadRequest,
+		Detail: verifierError,
+	}
+
+	sm := mock_deps.NewMockISessionManager(ctrl)
+
+	v := mock_deps.NewMockIVerifier(ctrl)
+
+	h := NewHandler(sm, v, "1h", 1)
+
+	w := httptest.NewRecorder()
+
+	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewReader(testCMW))
 	req.Header.Set("Accept", ChallengeResponseSessionMediaType)
 	req.Header.Set("Content-Type", "application/vnd.veraison.cmw")
 

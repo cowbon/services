@@ -8,16 +8,19 @@ provisioning:
   protocol: https
   cert: /opt/veraison/provisioning.crt
   cert-key: /opt/veraison/provisioning.key
+  max-payload-size: 1MB
 verification:
   listen-addr: 0.0.0.0:${VERIFICATION_PORT}
   protocol: https
   cert: /opt/veraison/verification.crt
   cert-key: /opt/veraison/verification.key
+  max-payload-size: 1MB
 management:
   listen-addr: 0.0.0.0:${MANAGEMENT_PORT}
   protocol: https
   cert: /opt/veraison/management.crt
   cert-key: /opt/veraison/management.key
+  max-payload-size: 1MB
 coserv:
   listen-addr: 0.0.0.0:${COSERV_PORT}
   protocol: https

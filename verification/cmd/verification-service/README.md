@@ -19,6 +19,9 @@ configuration:
 - `protocol` (optional): the protocol that will be used. Defaults to "https" if not specified. Must be either "http" or "https".
 - `cert`: path to the x509 certificate to be used. Must be specified if protocol is "https"
 - `cert-key`: path to the key associated with the certificate specified in `cert`. Must be specified if protocol is "https"
+- `max-payload-size` (optional): the maximum permitted size of request payload
+  (i.e. the submitted evidence). This must be an integer value with an optional
+  unit specifier (e.g. "KB"); the default is "1MB".
 
 ### `verifier` configuration
 

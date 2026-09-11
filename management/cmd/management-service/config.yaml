@@ -12,6 +12,7 @@ management:
   protocol: https
   cert: ../../../deployments/docker/src/certs/management.crt
   cert-key: ../../../deployments/docker/src/certs/management.key
+  max-payload-size: 1MB
 po-agent:
   backend: opa
 logging:

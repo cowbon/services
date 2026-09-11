@@ -29,19 +29,22 @@ type IHandler interface {
 type Handler struct {
 	Provisioner provisioner.IProvisioner
 
-	WkCacheMaxAge time.Duration
-	logger        *zap.SugaredLogger
+	WkCacheMaxAge  time.Duration
+	MaxPayloadSize int64
+	logger         *zap.SugaredLogger
 }
 
 func NewHandler(
 	p provisioner.IProvisioner,
 	logger *zap.SugaredLogger,
 	wkCacheMaxAge string,
+	maxPayloadSize int64,
 ) IHandler {
 	return &Handler{
 		Provisioner:   p,
 		logger:        logger,
 		WkCacheMaxAge: capability.ParseCacheMaxAge(wkCacheMaxAge, defaultCacheMaxAge, logger),
+		MaxPayloadSize: maxPayloadSize,
 	}
 }
 
@@ -101,7 +104,7 @@ func (o *Handler) Submit(c *gin.Context) {
 	}
 
 	// read body
-	payload, err := io.ReadAll(c.Request.Body)
+	payload, err := io.ReadAll(http.MaxBytesReader(c.Writer, c.Request.Body, o.MaxPayloadSize))
 	if err != nil {
 		ReportProblem(c,
 			http.StatusBadRequest,

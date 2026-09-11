@@ -8,6 +8,7 @@ provisioning:
   cert: ../../../deployments/docker/src/certs/provisioning.crt
   cert-key: ../../../deployments/docker/src/certs/provisioning.key
   discovery-max-age: 1m
+  max-payload-size: 1MB
 vts:
   server-addr: localhost:50051
   tls: true

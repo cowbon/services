@@ -28,6 +28,7 @@ var (
 		Status:        2,
 		ServerVersion: "3.2",
 	}
+	maxPayloadSize = int64(99999)
 )
 
 func TestHandler_Submit_UnsupportedAccept(t *testing.T) {
@@ -75,7 +76,7 @@ func TestHandler_Submit_UnsupportedMediaType(t *testing.T) {
 		SupportedMediaTypes().
 		Return(supportedMediaTypes, nil)
 
-	h := NewHandler(dm, log.Named("test"), "1h")
+	h := NewHandler(dm, log.Named("test"), "1h", maxPayloadSize)
 
 	expectedCode := http.StatusUnsupportedMediaType
 	expectedType := "application/problem+json"
@@ -118,7 +119,7 @@ func TestHandler_Submit_NoBody(t *testing.T) {
 		).
 		Return(true, nil)
 
-	h := NewHandler(dm, log.Named("test"), "1h")
+	h := NewHandler(dm, log.Named("test"), "1h", maxPayloadSize)
 
 	expectedCode := http.StatusBadRequest
 	expectedType := "application/problem+json"
@@ -168,7 +169,7 @@ func TestHandler_Submit_DecodeFailure(t *testing.T) {
 		).
 		Return(errors.New(handlerError))
 
-	h := NewHandler(dm, log.Named("test"), "1h")
+	h := NewHandler(dm, log.Named("test"), "1h", maxPayloadSize)
 
 	expectedCode := http.StatusOK
 	expectedType := ProvisioningSessionMediaType
@@ -204,7 +205,7 @@ func TestHandler_Submit_ok(t *testing.T) {
 	expectedType := ProvisioningSessionMediaType
 	expectedStatus := "success"
 	dm := mock_deps.NewMockIProvisioner(ctrl)
-	h := NewHandler(dm, log.Named("api"), "1h")
+	h := NewHandler(dm, log.Named("api"), "1h", maxPayloadSize)
 
 	w := httptest.NewRecorder()
 	g, _ := gin.CreateTestContext(w)
@@ -249,7 +250,7 @@ func TestHandler_GetWellKnownProvisioningInfo_ok(t *testing.T) {
 		GetVTSState().
 		Return(&testGoodServiceState, nil)
 
-	h := NewHandler(dm, log.Named("test"), "1h")
+	h := NewHandler(dm, log.Named("test"), "1h", maxPayloadSize)
 
 	expectedCode := http.StatusOK
 	expectedType := capability.WellKnownMediaType
@@ -291,7 +292,7 @@ func TestHandler_GetWellKnownProvisioningInfo_GetRegisteredMediaTypes_empty(t *t
 		GetVTSState().
 		Return(&testGoodServiceState, nil)
 
-	h := NewHandler(dm, log.Named("test"), "1h")
+	h := NewHandler(dm, log.Named("test"), "1h", maxPayloadSize)
 
 	expectedCode := http.StatusOK
 	expectedType := capability.WellKnownMediaType
@@ -332,7 +333,7 @@ func TestHandler_GetWellKnownProvisioningInfo_GetServiceState_fail(t *testing.T)
 		GetVTSState().
 		Return(nil, errors.New("blah"))
 
-	h := NewHandler(dm, log.Named("test"), "1h")
+	h := NewHandler(dm, log.Named("test"), "1h", maxPayloadSize)
 
 	expectedCode := http.StatusInternalServerError
 	expectedType := "application/problem+json"
@@ -374,6 +375,46 @@ func TestHandler_GetWellKnownProvisioningInfo_UnsupportedAccept(t *testing.T) {
 
 	u := auth.NewPassthroughAuthorizer(log.Named("auth"))
 	NewRouter(h, u).ServeHTTP(w, g.Request)
+
+	var body problems.DefaultProblem
+	_ = json.Unmarshal(w.Body.Bytes(), &body)
+
+	assert.Equal(t, expectedCode, w.Code)
+	assert.Equal(t, expectedType, w.Result().Header.Get("Content-Type"))
+	assert.Equal(t, expectedBody, body)
+}
+
+func TestHandler_Submit_payload_too_large(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mediaType := "application/good+json"
+	endo := []byte("some data")
+	expectedCode := http.StatusBadRequest
+	expectedType := "application/problem+json"
+	expectedBody := problems.DefaultProblem{
+		Type:   "about:blank",
+		Title:  "Bad Request",
+		Status: http.StatusBadRequest,
+		Detail: "error reading body: http: request body too large",
+	}
+
+	dm := mock_deps.NewMockIProvisioner(ctrl)
+	h := NewHandler(dm, log.Named("api"), "1h", 1)
+
+	w := httptest.NewRecorder()
+	g, _ := gin.CreateTestContext(w)
+
+	dm.EXPECT().
+		IsSupportedMediaType(
+			gomock.Eq(mediaType),
+		).
+		Return(true, nil)
+	g.Request, _ = http.NewRequest(http.MethodPost, "/", bytes.NewReader(endo))
+	g.Request.Header.Add("Content-Type", mediaType)
+	g.Request.Header.Add("Accept", ProvisioningSessionMediaType)
+
+	h.Submit(g)
 
 	var body problems.DefaultProblem
 	_ = json.Unmarshal(w.Body.Bytes(), &body)

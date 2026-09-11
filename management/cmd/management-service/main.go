@@ -16,10 +16,11 @@ var (
 )
 
 type cfg struct {
-	ListenAddr string `mapstructure:"listen-addr" valid:"dialstring"`
-	Protocol   string `mapstructure:"protocol" valid:"in(http|https)"`
-	Cert       string `mapstructure:"cert"`
-	CertKey    string `mapstructure:"cert-key"`
+	ListenAddr     string `mapstructure:"listen-addr" valid:"dialstring"`
+	Protocol       string `mapstructure:"protocol" valid:"in(http|https)"`
+	Cert           string `mapstructure:"cert"`
+	CertKey        string `mapstructure:"cert-key"`
+	MaxPayloadSize string `mapstructure:"max-payload-size"`
 }
 
 func main() {
@@ -50,15 +51,21 @@ func main() {
 	}
 
 	cfg := cfg{
-		ListenAddr: DefaultListenAddr,
-		Protocol:   "https",
-		Cert:       "[unset]",
-		CertKey:    "[unset]",
+		ListenAddr:     DefaultListenAddr,
+		Protocol:       "https",
+		Cert:           "[unset]",
+		CertKey:        "[unset]",
+		MaxPayloadSize: "1MB",
 	}
 	loader := config.NewLoader(&cfg)
 	if err := loader.LoadFromViper(subs["management"]); err != nil {
 		log.Fatalf("Could not load verfication config: %v", err)
 
+	}
+
+	maxPayloadSize, err := config.ParseBytesSize(cfg.MaxPayloadSize)
+	if err != nil {
+		log.Fatalf("Could not parse max-payload-size: %v", err)
 	}
 
 	authorizer, err := auth.NewAuthorizer(subs["auth"], log.Named("auth"))
@@ -72,7 +79,7 @@ func main() {
 		}
 	}()
 
-	handler := api.NewHandler(pm, log.Named("api"))
+	handler := api.NewHandler(pm, log.Named("api"), maxPayloadSize)
 
 	if cfg.Protocol == "https" {
 		apiServerTLS(handler, authorizer, cfg.ListenAddr, cfg.Cert, cfg.CertKey)

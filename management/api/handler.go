@@ -1,4 +1,4 @@
-// Copyright 2023 Contributors to the Veraison project.
+// Copyright 2023-2026 Contributors to the Veraison project.
 // SPDX-License-Identifier: Apache-2.0
 
 package api
@@ -33,14 +33,16 @@ var (
 )
 
 type Handler struct {
-	Manager *management.PolicyManager
-	Logger  *zap.SugaredLogger
+	Manager        *management.PolicyManager
+	Logger         *zap.SugaredLogger
+	MaxPayloadSize int64
 }
 
-func NewHandler(manager *management.PolicyManager, logger *zap.SugaredLogger) Handler {
+func NewHandler(manager *management.PolicyManager, logger *zap.SugaredLogger, maxPayloadSize int64) Handler {
 	return Handler{
-		Manager: manager,
-		Logger:  logger,
+		Manager:        manager,
+		Logger:         logger,
+		MaxPayloadSize: maxPayloadSize,
 	}
 }
 
@@ -79,7 +81,7 @@ func (o Handler) CreatePolicy(c *gin.Context) {
 		name = "default"
 	}
 
-	payload, err := io.ReadAll(c.Request.Body)
+	payload, err := io.ReadAll(http.MaxBytesReader(c.Writer, c.Request.Body, o.MaxPayloadSize))
 	if err != nil {
 		reportProblem(c, http.StatusBadRequest, fmt.Sprintf("error reading body: %s", err))
 		return

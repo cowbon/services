@@ -51,17 +51,24 @@ type Handler struct {
 	SessionManager sessionmanager.ISessionManager
 	Verifier       verifier.IVerifier
 
-	WkCacheMaxAge time.Duration
-	logger        *zap.SugaredLogger
+	WkCacheMaxAge  time.Duration
+	MaxPayloadSize int64
+	logger         *zap.SugaredLogger
 }
 
-func NewHandler(sm sessionmanager.ISessionManager, v verifier.IVerifier, wkCacheMaxAge string) IHandler {
+func NewHandler(
+	sm sessionmanager.ISessionManager,
+	v verifier.IVerifier,
+	wkCacheMaxAge string,
+	maxPayloadSize int64,
+) IHandler {
 	logger := log.Named("api-handler")
 
 	return &Handler{
 		SessionManager: sm,
 		Verifier:       v,
 		WkCacheMaxAge:  capability.ParseCacheMaxAge(wkCacheMaxAge, defaultCacheMaxAge, logger),
+		MaxPayloadSize: maxPayloadSize,
 		logger:         logger,
 	}
 }
@@ -311,12 +318,18 @@ func (o *Handler) SubmitEvidence(c *gin.Context) {
 	}
 
 	// read body (i.e., evidence)
-	evidence, err := io.ReadAll(c.Request.Body)
+	evidence, err := io.ReadAll(http.MaxBytesReader(c.Writer, c.Request.Body, o.MaxPayloadSize))
 	if err != nil || len(evidence) == 0 {
 		o.logger.Error("unable to read evidence from the request body: %v", err)
+
+		msg := "unable to read evidence from the request body"
+		if err != nil && err.Error() == "http: request body too large" {
+			msg = "payload too large"
+		}
+
 		ReportProblem(c,
 			http.StatusBadRequest,
-			"unable to read evidence from the request body",
+			msg,
 		)
 		return
 	}
